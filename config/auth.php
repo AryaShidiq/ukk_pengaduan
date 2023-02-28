@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'masyarakat',
+        'guard' => 'web',
         'passwords' => 'users',
         // 'guard' => 'web',
         // 'passwords' => 'users',
@@ -40,13 +40,13 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'masyarakats',
+            'provider' => 'users',
         ],
 
-        'masyarakat' => [
-            'driver' => 'session',
-            'provider' => 'masyarakats',
-        ],
+        // 'masyarakat' => [
+        //     'driver' => 'session',
+        //     'provider' => 'masyarakats',
+        // ],
 
         'admin' => [
             'driver' => 'session',
@@ -78,20 +78,20 @@ return [
     */
 
     'providers' => [
-        // 'users' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\User::class,
-        // ],
+        'users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Masyarakat::class,
+        ],
 
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Petugas::class,
         ],
 
-        'masyarakats' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\Masyarakat::class,
-        ],
+        // 'masyarakats' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Models\Masyarakat::class,
+        // ],
 
         // 'users' => [
         //     'driver' => 'database',

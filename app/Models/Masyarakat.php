@@ -17,7 +17,8 @@ class Masyarakat extends Authenticatable
     protected $fillable = [
         'email','password','telp','nik','nama'
     ];
-    protected $guard_name   = 'masyarakat';
+    // protected $guard_name   = 'masyarakat';
+    protected $guard   = 'web';
 
     protected $hidden = [
         'passoword'

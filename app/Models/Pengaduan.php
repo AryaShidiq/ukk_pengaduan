@@ -9,10 +9,16 @@ class Pengaduan extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $guarded  = [''];
+    protected $table    = 'pengaduans';
 
     public function getKategori()
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function getNikName()
+    {
+        return $this->belongsTo(Masyarakat::class, 'nik','nik');
     }
 }

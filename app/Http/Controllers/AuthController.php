@@ -18,47 +18,47 @@ class AuthController extends Controller
         return view('Auth.login');
     }
 
-    public function authenticate(Request $request)
-    {
-        $credentials = $request->validate([
-            'email'=>'required|email',
-            'password'=> 'required'
-        ]);
+    // public function authenticate(Request $request)
+    // {
+    //     $credentials = $request->validate([
+    //         'email'=>'required|email',
+    //         'password'=> 'required'
+    //     ]);
 
-        // if (Auth::guard('admin')->attempt($credentials)) {
-        //     if (Auth::guard('admin')->user()->level == 'petugas') {
-        //         // return redirect('/petugas');
-        //         $request->session()->regenerate();
-        //         return redirect('/');
-        //         // return 'Petugas';
-        //     } elseif(Auth::guard('admin')->user()->level == 'admin') {
-        //         // return redirect('admin');
-        //         $request->session()->regenerate();
-        //         return redirect('/');
-        //         // return 'Admin';
-        //     }
-        //     // dd(Auth::guard('admin')->user()->level);
-        // } elseif(Auth::attempt($credentials)) {
-        //     // return 'Masyarakat';
-        //     return redirect('/');
-        // }
+    //     // if (Auth::guard('admin')->attempt($credentials)) {
+    //     //     if (Auth::guard('admin')->user()->level == 'petugas') {
+    //     //         // return redirect('/petugas');
+    //     //         $request->session()->regenerate();
+    //     //         return redirect('/');
+    //     //         // return 'Petugas';
+    //     //     } elseif(Auth::guard('admin')->user()->level == 'admin') {
+    //     //         // return redirect('admin');
+    //     //         $request->session()->regenerate();
+    //     //         return redirect('/');
+    //     //         // return 'Admin';
+    //     //     }
+    //     //     // dd(Auth::guard('admin')->user()->level);
+    //     // } elseif(Auth::attempt($credentials)) {
+    //     //     // return 'Masyarakat';
+    //     //     return redirect('/');
+    //     // }
 
-        // if (Auth::guard('admin')->attempt($credentials)) {
-        //     return redirect('/');
-        // }
-        // if (Auth::guard('masyarakat')->attempt($credentials)) {
-        //     return redirect('/');
-        // }
+    //     // if (Auth::guard('admin')->attempt($credentials)) {
+    //     //     return redirect('/');
+    //     // }
+    //     // if (Auth::guard('masyarakat')->attempt($credentials)) {
+    //     //     return redirect('/');
+    //     // }
 
-        if(Auth::guard('masyarakat')->attempt((['email' => $request->email, 'password' => $request->password]))) {
-            return redirect('/');
-        }elseif(Auth::guard('admin')->attempt((['email' => $request->email, 'password' => $request->password]))) {
-            return redirect('/');
-        }
+    //     if(Auth::guard('masyarakat')->attempt((['email' => $request->email, 'password' => $request->password]))) {
+    //         return redirect('/');
+    //     }elseif(Auth::guard('admin')->attempt((['email' => $request->email, 'password' => $request->password]))) {
+    //         return redirect('/');
+    //     }
 
-        return redirect()->back();
+    //     return redirect()->back();
 
-    }
+    // }
 
     public function loginUser(Request $request)
     {
@@ -66,11 +66,12 @@ class AuthController extends Controller
             'email'=>'required|email',
             'password'=> 'required'
         ]);
-        $login  = Auth::guard('masyarakat')->attempt(['email' => $request-> email, 'password' => $request->password]);
-        // if(Auth::guard('masyarakat')->attempt((['email' => $request->email, 'password' => $request->password]))) {
-        if($login){
-            // Auth::guard('masyarakat')->login($login);
-            return redirect('/');
+        // $login  = Auth::guard('masyarakat')->attempt(['email' => $request-> email, 'password' => $request->password]);
+        if (Auth::guard('web')->attempt($credentials)) {
+            $request->session()->regenerate();
+
+            return redirect('/masyarakat');
+            // return 'Login OK';
         }
 
         return redirect()->back();
@@ -104,18 +105,10 @@ class AuthController extends Controller
             'password'=> 'required'
         ]);
 
-        // if(Auth::guard('admin')->attempt((['email' => $request->email, 'password' => $request->password]))) {
-        //     $request->session()->regenerate();
-        //     return redirect('/');
-        // }
-        $test = Auth::guard('admin')->attempt([
-            'email' => $request->email,
-            'password' => $request->password,
-         ]); 
-         if ($test) {
+        if(Auth::guard('admin')->attempt($credentials)) {
+            $request->session()->regenerate();
             return redirect('/');
-         }
-        // dd($test);
+        }
 
         // if (self::guard('admin')->attempt($request->only('email', 'password'))) {
         //     self::guard('admin')->login(Auth::user(), true);

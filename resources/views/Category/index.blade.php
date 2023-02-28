@@ -48,6 +48,7 @@
                             <th class="text-center"><input type="checkbox" id="selectAll"></th>
                             <th>NO</th>
                             <th>Nama Category</th>
+                            <th>Slug</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -58,6 +59,7 @@
                             <td class="text-center"><input type="checkbox" name="id[]" id="{{$j->id}}" value="{{$j->id}}"></td>
                             <td>{{$k+1}}</td>
                             <td>{{$j->name}}</td>
+                            <td>{{$j->slug}}</td>
                             <td>{{$j->status}}</td>
                             <td><a href="{{url('category/edit/'.$j->id)}}" class="btn btn-light btn-sm"><i class="mdi mdi-grease-pencil"></i></a></td>
                           </tr>

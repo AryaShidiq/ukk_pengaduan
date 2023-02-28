@@ -19,9 +19,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    // $user = Auth::guard('masyarakat')->user();
     return view('welcome');
 });
-Route::group(['middleware' => 'auth:admin'],function(){
+Route::group(['middleware' => ['auth:admin']],function(){
     Route::get('/petugas', function () {
         return view('Petugas.index');
     });
@@ -32,8 +33,8 @@ Route::group(['middleware' => 'auth:admin'],function(){
 });
 
 Route::get('/masyarakat', function () {
-    return view('Masyarakat.index');
-})->middleware('auth:masyarakat');
+    return view('Masyarakat.index' );
+})->middleware('auth:web,admin');
 
 // Route::get('/masyarakat', function () {
 //     return view('Masyarakat.index');
@@ -49,9 +50,12 @@ Route::post('register/post', [AuthController::class, 'postRegis']);
 Route::get('logout', [AuthController::class, 'logout']);
 Route::group(['prefix'=>'pengaduan'],function () {
     // Route::get('/orders/{id}', 'show');
-    Route::get('/', [PengaduanController::class ,'index'])->middleware('auth:web');
+    // Route::get('/', [PengaduanController::class ,'index'])->middleware('auth:web');
+    Route::get('/', [PengaduanController::class ,'index']);
     Route::get('create', [PengaduanController::class ,'create']);
-    Route::get('/edit', [PengaduanController::class ,'edit']);
+    Route::get('/edit/{id}', [PengaduanController::class ,'edit']);
+    Route::get('/detail/{id}', [PengaduanController::class, 'show']);
+    Route::post('/simpan', [PengaduanController::class,'simpanPengaduan']);
     // Route::post('/orders', 'store');
 });
 Route::group(['prefix'=> 'category'],function () {
@@ -63,3 +67,14 @@ Route::group(['prefix'=> 'category'],function () {
     // Route::get('/{id}', 'show');
     // Route::post('/orders', 'store');
 });
+Auth::routes();
+Route::group(['prefix' => 'tanggapan'], function() {
+    Route::get('/', [TanggapanController::class, 'index']);
+    Route::get('/create', [TanggapanController::class, 'create']);
+    Route::get('/edit/{id}', [TanggapanController::class, 'edit']);
+    Route::post('/simpan', [TanggapanController::class, 'simpanTanggapan']);
+    Route::get('/detail/{id}', [TanggapanController::class, 'show']);
+    Route::match(['get', 'post'], '/action', [TanggapanController::class, 'action']);
+});
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

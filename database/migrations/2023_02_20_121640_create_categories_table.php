@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status',1)->default('h');
             $table->unsignedBigInteger('add_by');
             $table->foreign('add_by')->references('id_petugas')->on('petugas');
-            $table->unsignedBigInteger('edit_by');
+            $table->unsignedBigInteger('edit_by')->nullable();
             $table->foreign('edit_by')->references('id_petugas')->on('petugas');
             $table->timestamps();
         });

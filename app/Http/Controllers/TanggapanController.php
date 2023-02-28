@@ -15,7 +15,9 @@ class TanggapanController extends Controller
      */
     public function index()
     {
-        return view('Masyarakat.index');
+        $tanggapan  = Tanggapan::all();
+
+        return view('Tanggapan.index', compact('tanggapan'));
     }
 
     /**
@@ -46,9 +48,11 @@ class TanggapanController extends Controller
      * @param  \App\Models\Tanggapan  $tanggapan
      * @return \Illuminate\Http\Response
      */
-    public function show(Tanggapan $tanggapan)
+    public function show($id)
     {
-        //
+        $tanggapan  = Tanggapan::where('id_tanggapan',$id)->first();
+        
+        return view('Tanggapan.show', compact('tanggapan'));
     }
 
     /**

@@ -13,11 +13,13 @@ class Petugas extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table        = 'petugas';
+    protected $primary      = 'id_petugas';
     // protected $guarded      = [];
     protected $fillable     = [
         'nama_petugas','level','email','password','telp'
     ];
-    protected $guard_name   = 'admin';
+    // protected $guard_name   = 'admin';
+    protected $guard   = 'admin';
 
     protected $hidden = [
         'password'
