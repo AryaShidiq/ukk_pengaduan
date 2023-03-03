@@ -12,13 +12,14 @@ class Masyarakat extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     // protected $guarded      = [];
-    protected $table    = 'masyarakats';
+    protected $table        = 'masyarakats';
+    protected $primaryKey   = 'id';
 
     protected $fillable = [
         'email','password','telp','nik','nama'
     ];
     // protected $guard_name   = 'masyarakat';
-    protected $guard   = 'web';
+    protected $guard   = 'masyarakat';
 
     protected $hidden = [
         'passoword'

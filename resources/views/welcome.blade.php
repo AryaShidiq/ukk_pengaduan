@@ -5,14 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Agency - Start Bootstrap Theme</title>
+        <title>Keluh Kesah Penduduk Planet Depok</title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="{{asset('frontend/assets/favicon.ico')}}" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{asset('frontend/css/styles.css')}}" rel="stylesheet" />
     </head>
@@ -33,6 +34,14 @@
                         <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="#team">Team</a></li>
                         <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                        @if (Auth::guard('masyarakat')->check())
+                        <li class="nav-item"><a class="nav-link" href="#">{{Auth::guard('masyarakat')->user()->nama}}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{route('logout')}}">Logout</a></li>
+                        @else
+                        <li class="nav-item"><a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
+                        {{-- <li class="nav-item"><a class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Register</a></li> --}}
+                        {{-- <li class="nav-item"><a class="nav-link" href="{{route('login')}}">Login Di sini YGY</a></li> --}}
+                        @endif
                     </ul>
                 </div>
             </div>
@@ -50,7 +59,7 @@
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">Services</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h3 class="section-subheading text-muted text-capitalize">wadah aduan penduduk planet depok.</h3>
                 </div>
                 <div class="row text-center">
                     <div class="col-md-4">
@@ -67,15 +76,15 @@
                             <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
                         </span>
                         <h4 class="my-3">Responsive Design</h4>
-                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                        <p class="text-muted text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
                     </div>
                     <div class="col-md-4">
                         <span class="fa-stack fa-4x">
                             <i class="fas fa-circle fa-stack-2x text-primary"></i>
                             <i class="fas fa-lock fa-stack-1x fa-inverse"></i>
                         </span>
-                        <h4 class="my-3">Web Security</h4>
-                        <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima maxime quam architecto quo inventore harum ex magni, dicta impedit.</p>
+                        <h4 class="my-3">Privacy Security</h4>
+                        <p class="text-muted text-capitalize">kami menjamin keamanan data pemberi aduan.</p>
                     </div>
                 </div>
             </div>
@@ -186,17 +195,17 @@
             <div class="container">
                 <div class="text-center">
                     <h2 class="section-heading text-uppercase">About</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h3 class="section-subheading text-muted text-capitalize">tahap-tahap proses aduan.</h3>
                 </div>
                 <ul class="timeline">
                     <li>
                         <div class="timeline-image"><img class="rounded-circle img-fluid" src="{{asset('frontend/assets/img/about/1.jpg')}}" alt="..." /></div>
                         <div class="timeline-panel">
                             <div class="timeline-heading">
-                                <h4>2009-2011</h4>
-                                <h4 class="subheading">Our Humble Beginnings</h4>
+                                <h4>Login</h4>
+                                <h4 class="subheading text-capitalize">jika anda belum mempunyai akun, <a href="{{url('register')}}" style="text-decoration: none">Daftar Di Sini</a> </h4>
                             </div>
-                            <div class="timeline-body"><p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p></div>
+                            <div class="timeline-body"><p class="text-muted text-capitalize">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt ut voluptatum eius sapiente, totam reiciendis temporibus qui quibusdam, recusandae sit vero unde, sed, incidunt et ea quo dolore laudantium consectetur!</p></div>
                         </div>
                     </li>
                     <li class="timeline-inverted">
@@ -310,8 +319,8 @@
         <section class="page-section" id="contact">
             <div class="container">
                 <div class="text-center">
-                    <h2 class="section-heading text-uppercase">Contact Us</h2>
-                    <h3 class="section-subheading text-muted">Lorem ipsum dolor sit amet consectetur.</h3>
+                    <h2 class="section-heading text-uppercase">FORM Pengaduan</h2>
+                    <h3 class="section-subheading text-muted text-capitalize">buat pengaduan dengan mengisi form di bawah ini.</h3>
                 </div>
                 <!-- * * * * * * * * * * * * * * *-->
                 <!-- * * SB Forms Contact Form * *-->
@@ -320,25 +329,48 @@
                 <!-- To make this form functional, sign up at-->
                 <!-- https://startbootstrap.com/solution/contact-forms-->
                 <!-- to get an API token!-->
-                <form id="contactForm" data-sb-form-api-token="API_TOKEN">
+                <form id="contactForm" action="{{url('kirim-pengaduan')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="row align-items-stretch mb-5">
                         <div class="col-md-6">
+                            <input type="hidden" name="tgl_pengaduan" value="{{$data['tanggal']}}">
+                            {{-- <input type="hidden" name="nik" value="{{Auth::guard('masyarakat')->user()->nik}}"> --}}
                             <div class="form-group">
                                 <!-- Name input-->
-                                <input class="form-control" id="name" type="text" placeholder="Your Name *" data-sb-validations="required" />
-                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                                <input class="form-control" name="judul_pengaduan" value="{{old('judul_pengaduan')}}" id="judul_pengaduan" type="text" placeholder="Judul Pengaduan" data-sb-validations="required" required/>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A Judul Pengaduan is required.</div>
+                                @if ($errors->has('judul_pengaduan'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('judul_pengaduan') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="form-group">
+                                <!-- Name input-->
+                                <input class="form-control" id="foto" type="file" name="foto" placeholder="Foto" data-sb-validations="required" required/>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A Foto is required.</div>
+                                @if ($errors->has('foto'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('foto') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <!-- Category input-->
-                                <select name="" id="" class="form-control">
+                                <select name="category" id="" class="form-control" required>
                                     <option value="" selected>--- Pilih Category --- </option>
-                                    <option value="">G</option>
-                                    <option value="">G</option>
-                                    <option value="">G</option>
+                                    @foreach ($data['category'] as $v)
+                                        <option value="{{$v->id}}">{{$v->name}}</option>
+                                    @endforeach
                                 </select>
                                 <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                                @if ($errors->has('category'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('category') }}</strong>
+                                    </span>
+                                @endif
                             </div>
-                            <div class="form-group">
+                            {{-- <div class="form-group">
                                 <!-- Email address input-->
                                 <input class="form-control" id="email" type="email" placeholder="Your Email *" data-sb-validations="required,email" />
                                 <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
@@ -348,13 +380,18 @@
                                 <!-- Phone number input-->
                                 <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" data-sb-validations="required" />
                                 <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.</div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="col-md-6">
                             <div class="form-group form-group-textarea mb-md-0">
                                 <!-- Message input-->
-                                <textarea class="form-control" id="message" placeholder="Your Message *" data-sb-validations="required"></textarea>
-                                <div class="invalid-feedback" data-sb-feedback="message:required">A message is required.</div>
+                                <textarea class="form-control" id="message" placeholder="Your Message *" data-sb-validations="required" name="isi_laporan" required>{{old('isi_laporan')}}</textarea>
+                                <div class="invalid-feedback" data-sb-feedback="message:required">Isi Lpaoran is required.</div>
+                                @if ($errors->has('isi_laporan'))
+                                    <span class="help-block text-danger">
+                                        <strong>{{ $errors->first('isi_laporan') }}</strong>
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -376,7 +413,7 @@
                     <!-- an error submitting the form-->
                     <div class="d-none" id="submitErrorMessage"><div class="text-center text-danger mb-3">Error sending message!</div></div>
                     <!-- Submit Button-->
-                    <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase disabled" id="submitButton" type="submit">Send Message</button></div>
+                    <div class="text-center"><button class="btn btn-primary btn-xl text-uppercase" id="submitButton" type="submit">Send Message</button></div>
                 </form>
             </div>
         </section>
@@ -397,6 +434,111 @@
                 </div>
             </div>
         </footer>
+        <!-- Modal Lodgin -->
+        <div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{route('post-log-user')}}">
+                <div class="modal-body">
+                    <h4 class="text-center text-uppercase">form login</h4>
+                        @csrf
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control p_input" name="email">
+                        </div>
+                        <div class="form-group">
+                            <label>Password </label>
+                            <input type="password" class="form-control p_input" name="password">
+                        </div>
+                        <p class="sign-up">Don't have an Account? <a class="text-secondary text-decoration-none" type="button" data-bs-toggle="modal" data-bs-target="#registerModal">Register Here</a></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+        </div>
+        <!-- Modal Register -->
+        <div class="modal fade" id="registerModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="registerModalLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form method="POST" action="{{url('register/post')}}">
+                                        @csrf
+                                        <div class="form-group">
+                                            <label>NIK</label>
+                                            <input type="text"  class="form-control p_input" name="nik" minlength="16" maxlength="16" required value="{{old('nik')}}">
+                                            @if ($errors->has('nik'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('nik') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Nama</label>
+                                            <input type="text" class="form-control p_input" name="nama" required value="{{old('nama')}}">
+                                            @if ($errors->has('nama'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('nama') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <label>NO Telfon</label>
+                                            <input type="text" class="form-control p_input" name="telp" minlength="11" maxlength="13" required value="{{old('telp')}}">
+                                            {{-- <input type="text" placeholder="Search For . . . " pattern= "[0-9]" value="{{ old('telp') }}" minlength="11" maxlength="13" name="telp" class="@error('telp') is-invalid @enderror form-control p_input" required  oninvalid="this.setCustomValidity('Please Fill With Number !!!')" onvalid="this.setCustomValidity('')"> --}}
+                                            @if ($errors->has('telp'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('telp') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" class="form-control p_input" name="email" required value="{{old('email')}}">
+                                            </div>
+                                            @if ($errors->has('email'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" class="form-control p_input" name="email" required value="{{old('email')}}">
+                                            </div>
+                                            @if ($errors->has('email'))
+                                            <span class="help-block text-danger">
+                                                <strong>{{ $errors->first('email') }}</strong>
+                                            </span>
+                                            @endif
+                                        </div>
+                                        <p class="sign-up text-center">Already have an Account?<a href="{{url('login')}}"> Login</a></p>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Register</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Portfolio Modals-->
         <!-- Portfolio item 1 modal popup-->
         <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
@@ -608,6 +750,48 @@
                 </div>
             </div>
         </div>
+        <script>
+            // $(document).ready(function () {
+            //     $('#registerModal').modal('show');
+            // });
+            $(function ($) {  
+                $.fn.inputFilter = function(callback, errMsg) {
+                    return this.on("input keydown keyup mousedown mouseup select contextmenu drop focusout", function(e) {
+                    if (callback(this.value)) {
+                        // Accepted value
+                        if (["keydown","mousedown","focusout"].indexOf(e.type) >= 0){
+                        $(this).removeClass("input-error");
+                        this.setCustomValidity("");
+                        }
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        // Rejected value - restore the previous one
+                        $(this).addClass("input-error");
+                        this.setCustomValidity(errMsg);
+                        this.reportValidity();
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        // Rejected value - nothing to restore
+                        this.value = "";
+                    }
+                    });
+                };
+                $(document).ready(function() {
+                    $("#nik_regis").inputFilter(function(value) {
+                        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+                    },"Only digits allowed");
+                });
+            });
+        </script>
+        @if (Session::has('registFail'))
+            <script>
+                alert('gagal regist');
+                $('#registerModal').modal('show');
+            </script>
+        @endif
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->

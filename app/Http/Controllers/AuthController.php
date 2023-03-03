@@ -5,11 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Masyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class AuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:admin')->except('logout');
+        $this->middleware('guest:masyarakat')->except('logout');
+    }
 
     // use AuthenticatesUsers;
 
@@ -18,85 +26,22 @@ class AuthController extends Controller
         return view('Auth.login');
     }
 
-    // public function authenticate(Request $request)
-    // {
-    //     $credentials = $request->validate([
-    //         'email'=>'required|email',
-    //         'password'=> 'required'
-    //     ]);
-
-    //     // if (Auth::guard('admin')->attempt($credentials)) {
-    //     //     if (Auth::guard('admin')->user()->level == 'petugas') {
-    //     //         // return redirect('/petugas');
-    //     //         $request->session()->regenerate();
-    //     //         return redirect('/');
-    //     //         // return 'Petugas';
-    //     //     } elseif(Auth::guard('admin')->user()->level == 'admin') {
-    //     //         // return redirect('admin');
-    //     //         $request->session()->regenerate();
-    //     //         return redirect('/');
-    //     //         // return 'Admin';
-    //     //     }
-    //     //     // dd(Auth::guard('admin')->user()->level);
-    //     // } elseif(Auth::attempt($credentials)) {
-    //     //     // return 'Masyarakat';
-    //     //     return redirect('/');
-    //     // }
-
-    //     // if (Auth::guard('admin')->attempt($credentials)) {
-    //     //     return redirect('/');
-    //     // }
-    //     // if (Auth::guard('masyarakat')->attempt($credentials)) {
-    //     //     return redirect('/');
-    //     // }
-
-    //     if(Auth::guard('masyarakat')->attempt((['email' => $request->email, 'password' => $request->password]))) {
-    //         return redirect('/');
-    //     }elseif(Auth::guard('admin')->attempt((['email' => $request->email, 'password' => $request->password]))) {
-    //         return redirect('/');
-    //     }
-
-    //     return redirect()->back();
-
-    // }
-
     public function loginUser(Request $request)
     {
         $credentials = $request->validate([
+            // 'nik'=> 'required',
             'email'=>'required|email',
             'password'=> 'required'
         ]);
         // $login  = Auth::guard('masyarakat')->attempt(['email' => $request-> email, 'password' => $request->password]);
-        if (Auth::guard('web')->attempt($credentials)) {
-            $request->session()->regenerate();
+        if (Auth::guard('masyarakat')->attempt($credentials)) {
 
-            return redirect('/masyarakat');
-            // return 'Login OK';
+            return redirect('/');
+            
         }
 
-        return redirect()->back();
+        return redirect()->back()->withInput($request->only('email', 'nik'));
 
-        // if(!Auth::guard('masyarakat')->validate($credentials)):
-        //     return redirect()->to('login')
-        //         ->withErrors(trans('auth.failed'));
-        // endif;
-
-        // $user = Auth::guard('masyarakat')->getProvider()->retrieveByCredentials($credentials);
-
-        // Auth::guard('masyarakat')->login($user);
-
-        // return $this->redirectUser($request, $user);
-
-
-    }
-
-    public function redirectUser(Request $request, $user)
-    {
-        return redirect('/masyarakat');
-    }
-
-    protected function guard($guard) {
-        return Auth::guard($guard);
     }
     public function loginAdmin(Request $request)
     {
@@ -107,7 +52,7 @@ class AuthController extends Controller
 
         if(Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/');
+            return redirect('/tanggapan');
         }
 
         // if (self::guard('admin')->attempt($request->only('email', 'password'))) {
@@ -121,26 +66,28 @@ class AuthController extends Controller
 
     public function logout()
     {
-        // if (Auth::guard('masyarakat')->check()) {
+        if (Auth::guard('masyarakat')->check()) {
             
-        //     Auth::guard('masyarakat')->logout();
+            Auth::guard('masyarakat')->logout();
             
-        //     request()->session()->invalidate();
-        //     request()->session()->regenerateToken();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
             
-        //     return redirect('/login')->with('success','logout sebagai user');
-        // } elseif(Auth::guard('admin')->check()) {
+            return redirect('/login')->with('success','logout sebagai user');
+        } elseif(Auth::guard('admin')->check()) {
             
-        //     Auth::guard('admin')->logout();
+            Auth::guard('admin')->logout();
             
-        //     request()->session()->invalidate();
-        //     request()->session()->regenerateToken();
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
 
-        //     return redirect('/login')->with('success', 'logout sebagai admin');
-        // }
-        Session::flush();
-        
-        Auth::logout();
+            return redirect('/')->with('success', 'logout sebagai admin');
+        }
+        // Auth::logout();
+
+        // request()->session()->invalidate();
+        // request()->session()->regenerateToken();
+
 
         return redirect('login');
 
@@ -164,16 +111,22 @@ class AuthController extends Controller
             'email.unique' => 'Email Telah Digunakan !',
             'telp'=> 'Isi No Telfon Hanya Dengan Angka!',
         ]);
-
+        // if($validation->fails()) {
+        //     return redirect()->back()->withErrors($validator) ->withInput();
+        //   }
         if ($validateData) {
-            $validateData['password'] = bcrypt($validateData['password']);
-    
+            $validateData['password'] = Hash::make($validateData['password']);
+            // dd($validateData);
             Masyarakat::create($validateData);
             $request->session()->flash('success', 'Berhasil Registrasi Silakan Login');
-            return redirect('/login')->with('success','Registrasi Berhasil !!!');
+            return redirect('/')->with('success','Registrasi Berhasil !!!');
         } else {
-            return redirect()->back()->with('danger');
+            // return redirect()->back()->withInput()->with('regist fail', 'gagal lurr');
+            return redirect()->back()->with('registFail', 'gagal lurr');
+            // return 'Login GAgal';
         }
+        // Masyarakat::create($request->all());
+        // return redirect('/');
         
     }
 }

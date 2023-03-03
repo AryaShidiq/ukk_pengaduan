@@ -17,8 +17,8 @@
                         </div>
                         <div class="mb-3">
                           <label for="" class="form-label">Tanggal Pengaduan</label>
-                          {{-- <input type="text" name="tgl_pengaduan" readonly value="{{old('tgl_pengaduan') ?? $data['tgl_pengaduan']}}" id="" class="form-control" placeholder="" aria-describedby="helpId"> --}}
-                          <input type="datetime-local" name="tgl_pengaduan" id="" value="{{old('tgl_pengaduan') ?? $data['tgl_pengaduan']}}">
+                          <input type="text" name="tgl_pengaduan" readonly value="{{old('tgl_pengaduan') ?? $data['tgl_pengaduan']}}" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                          {{-- <input type="datetime-local" name="tgl_pengaduan" id="" value="{{old('tgl_pengaduan') ?? $data['tgl_pengaduan']}}"> --}}
                         </div>
                         <div class="mb-3">
                           <label for="" class="form-label">Category Pengaduan</label>

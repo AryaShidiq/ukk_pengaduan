@@ -43,10 +43,10 @@ return [
             'provider' => 'users',
         ],
 
-        // 'masyarakat' => [
-        //     'driver' => 'session',
-        //     'provider' => 'masyarakats',
-        // ],
+        'masyarakat' => [
+            'driver' => 'session',
+            'provider' => 'masyarakats',
+        ],
 
         'admin' => [
             'driver' => 'session',
@@ -88,10 +88,10 @@ return [
             'model' => App\Models\Petugas::class,
         ],
 
-        // 'masyarakats' => [
-        //     'driver' => 'eloquent',
-        //     'model' => App\Models\Masyarakat::class,
-        // ],
+        'masyarakats' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Masyarakat::class,
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

@@ -17,7 +17,7 @@ class Pengaduan extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
-    public function getNikName()
+    public function getCitizen()
     {
         return $this->belongsTo(Masyarakat::class, 'nik','nik');
     }

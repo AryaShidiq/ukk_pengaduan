@@ -34,9 +34,10 @@
                                     <tr>
                                         <th class="text-center"><input type="checkbox" name="" id="selectAll"></th>
                                         <th>NO</th>
-                                        <th>NIK Pelapor</th>
                                         <th>Tanggal Pengaduan</th>
                                         <th>Kategori Pengaduan</th>
+                                        <th>NIK Pelapor</th>
+                                        <th>Nama Pelapor</th>
                                         <th>Status</th>
                                         <th>Action</th>
                                     </tr>
@@ -46,9 +47,10 @@
                                         <tr>
                                             <th class="text-center"><input type="checkbox" name="" id="{{$v['id_pengaduan']}}" value="{{$v['id_pengaduan']}}"></th>
                                             <th>{{$k+1}}</th>
-                                            <th>{{$v->nik}}</th>
                                             <th>{{$v->tgl_pengaduan}}</th>
                                             <th>{{$v->getKategori->name}}</th>
+                                            <th>{{$v->nik}}</th>
+                                            <th>{{$v->getCitizen->nama}}</th>
                                             {{-- <th>{{$v->category_id->getKategori->name}}</th> --}}
                                             <th>{{$v->status}}</th>
                                             <th>

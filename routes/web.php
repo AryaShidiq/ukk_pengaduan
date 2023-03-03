@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FrontendController;
+use App\Http\Controllers\MasyarakatController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\TanggapanController;
 use Illuminate\Support\Facades\Auth;
@@ -18,10 +20,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    // $user = Auth::guard('masyarakat')->user();
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     // $user = Auth::guard('masyarakat')->user();
+//     return view('welcome');
+// });
 Route::group(['middleware' => ['auth:admin']],function(){
     Route::get('/petugas', function () {
         return view('Petugas.index');
@@ -31,23 +33,19 @@ Route::group(['middleware' => ['auth:admin']],function(){
     });
     
 });
+// Frontend
+Route::get('/', [FrontendController::class, 'home']);
+Route::post('/kirim-pengaduan', [FrontendController::class, 'sendForm']);
 
-Route::get('/masyarakat', function () {
-    return view('Masyarakat.index' );
-})->middleware('auth:web,admin');
-
-// Route::get('/masyarakat', function () {
-//     return view('Masyarakat.index');
-// })->middleware('auth:admin,masyarakat');
-// Route::get('masyarakat', function(){
-//     return view('Masyarakat.index');
-// });
+// Auth
 Route::get('login', [AuthController::class, 'form'])->name('login');
 Route::post('postlogin-user', [AuthController::class, 'loginUser'])->name('post-log-user');
 Route::post('postlogin-admin', [AuthController::class, 'loginAdmin'])->name('post-log-admin');
 Route::get('register', [AuthController::class, 'formRegis']);
-Route::post('register/post', [AuthController::class, 'postRegis']);
-Route::get('logout', [AuthController::class, 'logout']);
+Route::post('register/post', [AuthController::class, 'postRegis'])->name('post-regis');
+Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+
 Route::group(['prefix'=>'pengaduan'],function () {
     // Route::get('/orders/{id}', 'show');
     // Route::get('/', [PengaduanController::class ,'index'])->middleware('auth:web');
@@ -68,13 +66,20 @@ Route::group(['prefix'=> 'category'],function () {
     // Route::post('/orders', 'store');
 });
 Auth::routes();
-Route::group(['prefix' => 'tanggapan'], function() {
+Route::group(['prefix' => 'tanggapan', 'middleware' => 'auth:admin'], function() {
     Route::get('/', [TanggapanController::class, 'index']);
+    Route::get('/ajax/{date}', [TanggapanController::class, 'fetchAjax']);
     Route::get('/create', [TanggapanController::class, 'create']);
     Route::get('/edit/{id}', [TanggapanController::class, 'edit']);
     Route::post('/simpan', [TanggapanController::class, 'simpanTanggapan']);
     Route::get('/detail/{id}', [TanggapanController::class, 'show']);
     Route::match(['get', 'post'], '/action', [TanggapanController::class, 'action']);
 });
-
+Route::prefix('masyarakat')->group(function () {
+    Route::get('/', [MasyarakatController::class, 'index']);
+});
+// Route::controller(MasyarakatController::class)->group(['prefix'=> 'masyarakat'],function () {
+//     Route::get('/', 'index');
+//     Route::post('/orders', 'store');
+// });
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Pengaduan;
+use App\Models\Petugas;
 use App\Models\Tanggapan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class TanggapanController extends Controller
@@ -27,8 +30,25 @@ class TanggapanController extends Controller
      */
     public function create()
     {
-        $kategori = Category::where('status', 'p')->get();
-        return view('Masyarakat.form', compact('kategori'));
+        // $kategori = Category::where('status', 'p')->get();
+        $data                   =    array();
+        $tanggal                = Carbon::now();
+        $petugas                = Petugas::where('id_petugas', 1)->first();
+        $data['id_pengaduan']   = Pengaduan::all();
+        $data['id']             = '';
+        $data['tgl_tanggapan']  = $tanggal->format('Y/M/D');
+        $data['tgl_pengaduan']  = '';
+        $data['tanggapan']      = '';
+        $data['id_petugas']     = $petugas->id_petugas;
+        $data['urlCancel']      = 'tanggapan';
+        $data['urlForm']        = 'tanggapan/simpan';
+        return view('Tanggapan.form', compact('data'));
+    }
+
+    public function fetchAjax($date)
+    {
+        $pengaduan  = Pengaduan::where('tgl_pengaduan',$date)->get();
+        return response()->json($pengaduan);
     }
 
     /**

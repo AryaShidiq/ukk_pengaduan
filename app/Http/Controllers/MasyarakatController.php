@@ -14,7 +14,8 @@ class MasyarakatController extends Controller
      */
     public function index()
     {
-        //
+        $masyarakat = Masyarakat::all();
+        return view('Masyarakat.index', compact('masyarakat'));
     }
 
     /**
