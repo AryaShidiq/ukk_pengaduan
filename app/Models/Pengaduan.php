@@ -9,8 +9,9 @@ class Pengaduan extends Model
 {
     use HasFactory;
 
-    protected $guarded  = [''];
-    protected $table    = 'pengaduans';
+    protected $guarded      = [''];
+    protected $table        = 'pengaduans';
+    protected $primaryKey   = 'id_pengaduan';
 
     public function getKategori()
     {

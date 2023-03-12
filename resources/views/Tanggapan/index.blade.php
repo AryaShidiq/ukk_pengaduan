@@ -45,7 +45,13 @@
                     <table class="table">
                       <thead>
                         <tr>
-                            <th class="text-center"><input type="checkbox" id="selectAll"></th>
+                            <th class="text-center">
+                              <div class="form-check form-check-muted m-0">
+                                <label class="form-check-label">
+                                  <input type="checkbox" class="form-check-input" id="selectAll">
+                                </label>
+                              </div>
+                            </th>
                             <th>NO</th>
                             <th>Pengaduan</th>
                             <th>Tanggal Tanggapan</th>
@@ -56,7 +62,12 @@
                       <tbody>
                         @foreach ($tanggapan as $k=> $j)
                           <tr>
-                            <td class="text-center"><input type="checkbox" name="id[]" id="{{$j->id_tanggapan}}" value="{{$j->id_tanggapan}}"></td>
+                            <td class="text-center">                       
+                              <div class="form-check form-check-muted m-0">
+                                <label class="form-check-label">
+                                  <input type="checkbox" class="form-check-input" name="id[]" id="{{$j->id_tanggapan}}" value="{{$j->id_tanggapan}}"></td>
+                                </label>
+                              </div>
                             <td>{{$k+1}}</td>
                             <td>{{$j->getPengaduan->judul_pengaduan}}</td>
                             <td>{{$j->tgl_tanggapan}}</td>

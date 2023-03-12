@@ -32,7 +32,13 @@
                             <table class="table">
                                 <thead>
                                     <tr>
-                                        <th class="text-center"><input type="checkbox" name="" id="selectAll"></th>
+                                        <th class="text-center">
+                                            <div class="form-check form-check-muted m-0">
+                                              <label class="form-check-label">
+                                                <input type="checkbox" class="form-check-input" id="selectAll">
+                                              </label>
+                                            </div>
+                                          </th>
                                         <th>NO</th>
                                         <th>NIK</th>
                                         <th>Nama</th>
@@ -44,7 +50,13 @@
                                 <tbody>
                                     @foreach ($masyarakat as $k=>$v)
                                         <tr>
-                                            <th class="text-center"><input type="checkbox" name="" id="{{$v['id_pengaduan']}}" value="{{$v['id_pengaduan']}}"></th>
+                                            <th class="text-center">
+                                                <div class="form-check form-check-muted m-0">
+                                                    <label class="form-check-label">
+                                                      <input type="checkbox" class="form-check-input" name="" id="{{$v['id_pengaduan']}}" value="{{$v['id_pengaduan']}}">
+                                                    </label>
+                                                </div>
+                                            </th>
                                             <th>{{$k+1}}</th>
                                             <th>{{$v->nik}}</th>
                                             <th>{{$v->nama}}</th>

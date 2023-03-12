@@ -36,11 +36,11 @@ class AuthController extends Controller
         // $login  = Auth::guard('masyarakat')->attempt(['email' => $request-> email, 'password' => $request->password]);
         if (Auth::guard('masyarakat')->attempt($credentials)) {
 
-            return redirect('/');
+            return redirect('/')->with('loginDone','ok');
             
         }
 
-        return redirect()->back()->withInput($request->only('email', 'nik'));
+        return redirect()->back()->with('loginFail','ok')->withInput($request->only('email', 'nik'));
 
     }
     public function loginAdmin(Request $request)
@@ -52,7 +52,7 @@ class AuthController extends Controller
 
         if(Auth::guard('admin')->attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/tanggapan');
+            return redirect('/control');
         }
 
         // if (self::guard('admin')->attempt($request->only('email', 'password'))) {
@@ -73,7 +73,7 @@ class AuthController extends Controller
             request()->session()->invalidate();
             request()->session()->regenerateToken();
             
-            return redirect('/login')->with('success','logout sebagai user');
+            return redirect('/')->with('success','logout sebagai user');
         } elseif(Auth::guard('admin')->check()) {
             
             Auth::guard('admin')->logout();
@@ -81,7 +81,7 @@ class AuthController extends Controller
             request()->session()->invalidate();
             request()->session()->regenerateToken();
 
-            return redirect('/')->with('success', 'logout sebagai admin');
+            return redirect('/login')->with('success', 'logout sebagai admin');
         }
         // Auth::logout();
 

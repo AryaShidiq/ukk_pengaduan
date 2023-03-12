@@ -15,6 +15,8 @@
     <!-- endinject -->
     <!-- Layout styles -->
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/select2/select2.min.css')}}">
+    <link rel="stylesheet" href="{{asset('vendors/select2-bootstrap-theme/select2-bootstrap.min.css')}}">
     <!-- End layout styles -->
     <link rel="shortcut icon" href="{{asset('images/favicon.png')}}" />
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
@@ -58,6 +60,9 @@
     <script src="{{asset('js/settings.js')}}"></script>
     <script src="{{asset('js/todolist.js')}}"></script>
     <script src="{{asset('js/select2.js')}}"></script>
+    <script src="{{asset('vendors/select2/select2.min.js')}}"></script>
+    <script src="{{asset('vendors/typehead.js/typehead.bundle.min.js')}}"></script>
+    <script src="{{asset('js/file-upload.js')}}"></script>
     <!-- endinject -->
     <!-- Custom js for this page -->
     <!-- End custom js for this page -->

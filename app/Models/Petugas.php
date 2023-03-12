@@ -12,11 +12,11 @@ class Petugas extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table        = 'petugas';
+protected $table            = 'petugas';
     protected $primaryKey   = 'id_petugas';
     // protected $guarded      = [];
     protected $fillable     = [
-        'nama_petugas','level','email','password','telp'
+        'nama_petugas','level','email','password','telp','add_by','edit_by'
     ];
     // protected $guard_name   = 'admin';
     protected $guard   = 'admin';
@@ -24,4 +24,15 @@ class Petugas extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function PetugasAddBy()
+    {
+        return $this->belongsTo(Petugas::class,'add_by', 'id_petugas');
+    }
+
+    public function PetugasEditBy()
+    {
+        return $this->belongsTo(Petugas::class, 'edit_by','id_petugas');
+    }
+
 }

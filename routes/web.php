@@ -4,8 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FrontendController;
 use App\Http\Controllers\MasyarakatController;
+use App\Http\Controllers\MyAccountController;
 use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\PetugasController;
 use App\Http\Controllers\TanggapanController;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -20,14 +23,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
+// Route::get('/test', function () {
+//     for($i=1; $i<10; $i++) {
+//         $total = $total + $i;
+//     }
+//     return $total;
 //     // $user = Auth::guard('masyarakat')->user();
-//     return view('welcome');
+//     // return view('welcome');
 // });
-Route::group(['middleware' => ['auth:admin']],function(){
-    Route::get('/petugas', function () {
-        return view('Petugas.index');
+Route::group(['middleware'=>'auth:admin','prefix'=>'control'] ,function () {
+    Route::get('/', [PetugasController::class, 'dashboard']);
+    Route::get('/myaccount', [MyAccountController::class, 'index']);
+    Route::prefix('petugas')->group(function () {
+        Route::get('/', [PetugasController::class, 'index']);
+        Route::get('/add', [PetugasController::class, 'add']);
+        Route::get('/edit/{id}', [PetugasController::class, 'edit']);
+        Route::post('/simpan', [PetugasController::class, 'simpan']);
+        Route::match(['get', 'post'], '/action', [PetugasController::class ,'action']);
+        Route::get('/admin', function () {
+            return view('Administrator.index');
+        });
     });
+});
+// Route::group(['middleware' => ['auth:admin','RoleAccess:admin']],function(){
+//     Route::get('/petugas', [PetugasController::class, 'index']);
+//     Route::get('/petugas/add', [PetugasController::class, 'add']);
+//     Route::get('/petugas/edit/{id}', [PetugasController::class, 'edit']);
+//     Route::post('/petugas/simpan', [PetugasController::class, 'simpan']);
+//     Route::match(['get', 'post'], 'petugas/action', [PetugasController::class ,'action']);
+//     Route::get('/admin', function () {
+//         return view('Administrator.index');
+//     });
+    
+// });
+Route::group(['middleware' => ['auth:admin'], 'prefix'=>'admin'],function(){
+    Route::get('/petugas/edit/{id}', [MyAccountController::class, 'edit']);
+    Route::post('/petugas/simpan', [MyAccountController::class, 'simpan']);
+    Route::match(['get', 'post'], 'petugas/action', [MyAccountController::class ,'action']);
     Route::get('/admin', function () {
         return view('Administrator.index');
     });
@@ -35,7 +67,8 @@ Route::group(['middleware' => ['auth:admin']],function(){
 });
 // Frontend
 Route::get('/', [FrontendController::class, 'home']);
-Route::post('/kirim-pengaduan', [FrontendController::class, 'sendForm']);
+Route::post('/kirim-pengaduan', [FrontendController::class, 'sendForm'])->middleware('auth:masyarakat');
+Route::get('/myaccount', [FrontendController::class,'myaccount'])->middleware('auth:masyarakat');
 
 // Auth
 Route::get('login', [AuthController::class, 'form'])->name('login');
@@ -54,6 +87,7 @@ Route::group(['prefix'=>'pengaduan'],function () {
     Route::get('/edit/{id}', [PengaduanController::class ,'edit']);
     Route::get('/detail/{id}', [PengaduanController::class, 'show']);
     Route::post('/simpan', [PengaduanController::class,'simpanPengaduan']);
+    Route::match(['get', 'post'], '/action', [PengaduanController::class ,'action']);
     // Route::post('/orders', 'store');
 });
 Route::group(['prefix'=> 'category'],function () {
@@ -69,7 +103,7 @@ Auth::routes();
 Route::group(['prefix' => 'tanggapan', 'middleware' => 'auth:admin'], function() {
     Route::get('/', [TanggapanController::class, 'index']);
     Route::get('/ajax/{date}', [TanggapanController::class, 'fetchAjax']);
-    Route::get('/create', [TanggapanController::class, 'create']);
+    Route::get('/create/pengaduan-{{id_pengaduan}}', [TanggapanController::class, 'create']);
     Route::get('/edit/{id}', [TanggapanController::class, 'edit']);
     Route::post('/simpan', [TanggapanController::class, 'simpanTanggapan']);
     Route::get('/detail/{id}', [TanggapanController::class, 'show']);

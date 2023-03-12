@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('telp', 13);
             $table->enum('level',['admin','petugas']);
+            $table->unsignedBigInteger('add_by')->nullable();
+            $table->foreign('add_by')->references('id_petugas')->on('petugas');
+            $table->unsignedBigInteger('edit_by')->nullable();
+            $table->foreign('edit_by')->references('id_petugas')->on('petugas');
             $table->rememberToken();
             $table->timestamps();
         });

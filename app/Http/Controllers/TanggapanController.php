@@ -7,7 +7,9 @@ use App\Models\Pengaduan;
 use App\Models\Petugas;
 use App\Models\Tanggapan;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TanggapanController extends Controller
 {
@@ -57,9 +59,30 @@ class TanggapanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function simpanTanggapan(Request $request)
     {
-        //
+        // dd($request->all());
+        $id_pg      = $request->input('id_pengaduan');
+        $date       = Carbon::now();
+        $tanggapan  = $request->input('isi_laporan'); 
+        $add_by     = auth()->guard('admin')->user()->id_petugas;
+        
+        try {
+            DB::beginTransaction();
+            $simpan                 = new Tanggapan();
+            $simpan->id_pengaduan   = $id_pg;
+            $simpan->tgl_tanggapan  = $date;
+            $simpan->tanggapan      = $tanggapan;
+            $simpan->id_petuhas     = $add_by;
+            $simpan->save();
+            Pengaduan::where('id_pengaduan', $id_pg)->update(['status'=>'selesai']);
+            DB::commit();
+            return redirect()->back()->with('tanggapan_done','ok'); 
+        } catch (Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('tanggapan_fail', 'fail');
+        }
+
     }
 
     /**

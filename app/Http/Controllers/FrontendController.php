@@ -4,20 +4,26 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Category;
+use App\Models\Masyarakat;
 use App\Models\Pengaduan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use session;
 
 class FrontendController extends Controller
 {
     public function home(Request $request)
     {
-        $data               = array();
-        $tanggal            = Carbon::now();
-        $kategori           = Category::where('status','p')->get();
-        $data['category']   = $kategori;
-        $data['tanggal']    = $tanggal;
+        $data                   = array();
+        $tanggal                = Carbon::now();
+        $kategori               = Category::where('status','p')->get();
+        $data['category']       = $kategori;
+        $data['tanggal']        = $tanggal;
+        $data['total_aduan']    = Pengaduan::count();
+        $data['aduan_clear']    = Pengaduan::where('status','selesai')->count();
+        $data['total_user']     = Masyarakat::count();
+        // return redirect('/')->with(['data',$data])->session()->flash('loginDone', 'This is a message!');
         return view('welcome', compact('data'));
     }
 
@@ -27,9 +33,8 @@ class FrontendController extends Controller
         $validator  = Validator::make($request->all(),[
             'tgl_pengaduan' => 'required',
             'category' => 'required',
-            // 'foto*' => 'image|mimes:jpeg,png,jpg,webp',
+            'foto' => 'image|mimes:jpeg,png,jpg,webp',
             'isi_laporan' => 'required',
-            'nik' => 'required',
             'judul_pengaduan' => 'required',
         ]);
         if ($validator->fails()) {
@@ -50,7 +55,7 @@ class FrontendController extends Controller
             $simpan->isi_laporan    = $isi_laporan;
             $simpan->nik            = $nik;
             $simpan->category_id    = $category;
-            $simpan->status         = 'proses';
+            $simpan->status         = '0';
             if ($request->hasFile('foto')) {
                 $file   = $request->file('foto');
                 $name   = uniqid().'.'.$file->getClientOriginalExtension();
@@ -58,14 +63,28 @@ class FrontendController extends Controller
                 $simpan->foto   = $name;
                 $simpan->save();
             }
+            // dd($simpan);
             $simpan->save();
             DB::commit();
-            return redirect()->back()->with('sendFormSuccess', 'berhasil rek');
+            return redirect()->back()->with('aduanDone', 'berhasil rek');
         } catch (Exception $e) {
             DB::rollBack();
 
             return redirect()->back()->with('sendFormFail', 'Gagal rek');
         }
 
+    }
+
+    public function myaccount()
+    {
+        $user   = Masyarakat::where('nik',auth()->guard('masyarakat')->user()->nik)->first();
+        // $pengaduan = Pengaduan::where('nik',auth()->guard('masyarakat')->user()->nik)->paginate(10);
+        $pengaduan = Pengaduan::where('nik',auth()->guard('masyarakat')->user()->nik)->get();
+        $data               = array();
+        $tanggal            = Carbon::now();
+        $kategori           = Category::where('status','p')->get();
+        $data['category']   = $kategori;
+        $data['tanggal']    = $tanggal;
+        return view('frontend.myaccount', compact('pengaduan', 'user','data'));
     }
 }

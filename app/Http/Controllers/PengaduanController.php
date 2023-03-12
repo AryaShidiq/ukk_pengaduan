@@ -18,11 +18,50 @@ class PengaduanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pengaduan = Pengaduan::all();
+        // $q          = $request->input('q');
+        $ctg        = (empty($request->input('ctg'))) ? null : $request->input('ctg');
+        $sts        = (empty($request->input('sts'))) ? null : $request->input('sts');
+        $kategori   = Category::where('status','p')->get();
+        $q          = (empty($request->input('q'))) ? null : htmlentities($request->input('q'), ENT_QUOTES);
+        $pengaduan  = Pengaduan::where('id_pengaduan','<>', 0);
+        $fromDate   = (empty($request->input('fromDate'))) ? null : date('Y-m-d 00:00:00', strtotime($request->get('fromDate')));
+        $toDate     = (empty($request->input('toDate'))) ? null : date('Y-m-d 23:59:59', strtotime($request->get('toDate')));
+        $filter     = [$fromDate,$toDate];
 
-        return view('Pengaduan.index', compact('pengaduan'));
+        if (!empty($fromDate)) {
+            $pengaduan  = $pengaduan->where('tgl_pengaduan', $fromDate);
+        }
+
+        if (!empty($fromDate && $toDate)) {
+            $pengaduan  = $pengaduan->where('id_pengaduan','<>', null)
+                                    ->orwhereBetween('tgl_pengaduan', [$fromDate,$toDate]);
+        }
+
+        if (!empty($ctg)) {
+            $pengaduan  = $pengaduan->where('category_id',$ctg);
+        }
+
+        if (!empty($sts)) {
+            $pengaduan  = $pengaduan->where('status',$sts);
+        }
+
+        // if (!empty($q)) {
+        //     $pengaduan  = $pengaduan->where('judul_pengaduan','LIKE','%'.$q.'%')->orWhereHas('getCitizen', function($query) use ($q){
+        //         return $query->where('nama','LIKE','%'.$q.'%')->Orwhere('email','LIKE','%'.$q.'%')->Orwhere('nik','LIKE','%'.$q.'%');
+        //     });
+        // }
+        if (!empty($q)) {
+            $pengaduan  = $pengaduan->where('judul_pengaduan','LIKE','%'.$q.'%')->orWhere('nik','LIKE','%'.$q.'%')->orWhereHas('getCitizen', function($query) use ($q){
+                return $query->where('nama','LIKE','%'.$q.'%')->Orwhere('email','LIKE','%'.$q.'%')->Orwhere('nik','LIKE','%'.$q.'%');
+            });
+        }
+
+        // $pengaduan->paginate(20);
+        $pengaduan= $pengaduan->get();
+
+        return view('Pengaduan.index', compact('pengaduan','kategori'));
     }
 
     /**
@@ -169,7 +208,12 @@ class PengaduanController extends Controller
      */
     public function edit(Request $request,$id)
     {
-        return view('Pengaduan.form');
+        $row                        = Pengaduan::where('id_pengaduan',$id)->first();
+        // $row                        = Pengaduan::find($id);
+        $data                       = array();
+        $data['judul_pengaduan']    = $row->judul_pengaduan;
+        $data['kategori']           = $row->category_id->getKategori->name;
+        return view('Pengaduan.form', compact('data'));
     }
 
     /**
@@ -189,9 +233,26 @@ class PengaduanController extends Controller
      *
      * @param  \App\Models\Pengaduan  $pengaduan
      * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pengaduan $pengaduan)
+    */
+    public function action(Request $request)
     {
-        //
+        // dd($request->all());
+        switch ($request->aksi) {
+            case 'selesai':
+                Pengaduan::whereIn('id_pengaduan', $request->input('id_action'))->update(['status'=>'selesai']);
+                return redirect()->back()->with('success', 'Data Sudah Di Publish');
+                break;
+            case 'proses':
+                Pengaduan::whereIn('id_pengaduan', $request->input('id_action'))->update(['status'=>'proses']);
+                return redirect()->back()->with('warning', 'Data Sudah di Hidden !!!');
+                break;
+            case 'd':
+                Pengaduan::whereIn('id_pengaduan', $request->input('id_action'))->delete();
+                return redirect()->back()->with('danger', 'Data Sudah Di Hapus');
+                break;
+            default:
+                return redirect()->back()->with('error', 'Error Connection !!!');
+                break;
+        }
     }
 }

@@ -39,7 +39,7 @@ class RedirectIfAuthenticated
             }
             return redirect('/category');
         }
-        if ($guard == "web" && Auth::guard($guard)->check()) {
+        if ($guard == "masyarakat" && Auth::guard($guard)->check()) {
             return redirect('/');
         }
         if (Auth::guard($guard)->check()) {
