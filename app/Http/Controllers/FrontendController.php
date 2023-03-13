@@ -75,16 +75,16 @@ class FrontendController extends Controller
 
     }
 
-    public function myaccount()
+    public function laporanku()
     {
         $user   = Masyarakat::where('nik',auth()->guard('masyarakat')->user()->nik)->first();
         // $pengaduan = Pengaduan::where('nik',auth()->guard('masyarakat')->user()->nik)->paginate(10);
-        $pengaduan = Pengaduan::where('nik',auth()->guard('masyarakat')->user()->nik)->get();
+        $pengaduan          = Pengaduan::where('nik',auth()->guard('masyarakat')->user()->nik)->paginate(10);
         $data               = array();
         $tanggal            = Carbon::now();
         $kategori           = Category::where('status','p')->get();
         $data['category']   = $kategori;
         $data['tanggal']    = $tanggal;
-        return view('frontend.myaccount', compact('pengaduan', 'user','data'));
+        return view('frontend.laporanku', compact('pengaduan', 'user','data'));
     }
 }

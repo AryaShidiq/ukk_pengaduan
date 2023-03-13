@@ -20,7 +20,7 @@ class TanggapanController extends Controller
      */
     public function index()
     {
-        $tanggapan  = Tanggapan::all();
+        $tanggapan  = Tanggapan::paginate(10);
 
         return view('Tanggapan.index', compact('tanggapan'));
     }
@@ -73,14 +73,15 @@ class TanggapanController extends Controller
             $simpan->id_pengaduan   = $id_pg;
             $simpan->tgl_tanggapan  = $date;
             $simpan->tanggapan      = $tanggapan;
-            $simpan->id_petuhas     = $add_by;
+            $simpan->id_petugas     = $add_by;
+            // dd($simpan);
             $simpan->save();
             Pengaduan::where('id_pengaduan', $id_pg)->update(['status'=>'selesai']);
             DB::commit();
-            return redirect()->back()->with('tanggapan_done','ok'); 
+            return redirect()->back()->with('tanggapan_done','Tanggapan Berhasil Dibuat !!! '); 
         } catch (Exception $e) {
             DB::rollBack();
-            return redirect()->back()->with('tanggapan_fail', 'fail');
+            return redirect()->back()->with('tanggapan_fail', 'Tanggapan Gagal Dibuat !!! ');
         }
 
     }
@@ -127,8 +128,17 @@ class TanggapanController extends Controller
      * @param  \App\Models\Tanggapan  $tanggapan
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tanggapan $tanggapan)
+    public function action(Request $request)
     {
-        //
+        switch ($request->aksi) {
+            case 'd':
+                Tanggapan::whereIn('id_tanggapan', $request->input('id'))->delete();
+                return redirect()->back()->with('success','Data telah dihapus !!!');
+                break;
+            
+            default:
+                # code...
+                break;
+        }
     }
 }

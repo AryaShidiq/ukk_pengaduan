@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-  <div class="card">
+<div class="card">
     <div class="card-header">
       <div class="page-header">
         <h3 class="page-title"> Basic Tables </h3>
@@ -28,10 +28,40 @@
                       </div>
                   </form>
               </div>
-              @if (Session::has('success'))
+              {{-- @if (Session::has('success'))
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                     <span>{!! Session::get('success') !!}</span>
+                </div>
+              @endif --}}
+              @if (Session::has('success'))
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                    <div>
+                      {{-- Data Berhasil Di Simpan !!!  --}}
+                      <span>{!! Session::get('success') !!}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              @endif
+              @if (Session::has('successSubmit'))
+                <div class="alert alert-success alert-dismissible fade show d-flex align-items-center" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                    <div>
+                      {{-- Data Berhasil Di Simpan !!!  --}}
+                      <span>{!! Session::get('successSubmit') !!}</span>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+              @endif
+              @if (Session::has('errorSubmit'))
+                <div class="alert alert-danger alert-dismissible fade show d-flex align-items-center" role="alert">
+                  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                  <div>
+                    {{-- Data Berhasil Di Simpan !!!  --}}
+                    <span>{!! Session::get('errorSubmit') !!}</span>
+                  </div>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
               @endif
             </div>
@@ -42,7 +72,7 @@
                 @csrf
                 <input type="hidden" name="aksi" id="aksi" value="">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table my-4">
                       <thead>
                         <tr>
                           <th class="text-center">
@@ -56,6 +86,8 @@
                           <th>Nama Category</th>
                           <th>Slug</th>
                           <th>Status</th>
+                          <th>Add By</th>
+                          <th>Edit By</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -79,11 +111,18 @@
                                   <label for="" class="badge badge-warning">Hidden</label>
                               @endif
                             </td>
+                            <td>{{$j->addBy->nama_petugas}}</td>
+                            @if (!empty($j->edit_by))
+                              <td>{{$j->editBy->nama_petugas}}</td>
+                            @else
+                              <td> -- </td>
+                            @endif
                             <td><a href="{{url('category/edit/'.$j->id)}}" class="btn btn-light btn-sm"><i class="mdi mdi-grease-pencil"></i></a></td>
                           </tr>
                         @endforeach
                       </tbody>
                     </table>
+                    {!! $kategori->links() !!}
                   </div>
               </form>
             </div>

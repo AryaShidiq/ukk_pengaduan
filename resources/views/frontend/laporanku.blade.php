@@ -41,7 +41,7 @@
                                   {{auth()->guard('masyarakat')->user()->nama}}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="{{url('myaccount')}}">My Account</a></li>
+                                    <li><a class="dropdown-item" href="{{url('laporanku')}}">Laporan Ku</a></li>
                                     <li><a class="dropdown-item" href="{{route('logout')}}">Logout</a></li>
                                 </ul>
                             </div>
@@ -117,7 +117,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-dark">
+                                    <table class="table table-dark my-4">
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="text-center">NO</th>
@@ -161,11 +161,6 @@
                                                                             class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value="{{$v->judul_pengaduan}}" disabled>
                                                                         </div>
                                                                         <div class="mb-3">
-                                                                          <label for="" class="form-label text-start">Tanggal Pengaduan</label>
-                                                                          <input type="text"
-                                                                            class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value="{{\Carbon\Carbon::parse($v->tgl_pengaduan)->format('j F , Y')}}" disabled>
-                                                                        </div>
-                                                                        <div class="mb-3">
                                                                           <label for="" class="form-label text-start">Status : @if($v->status == '0') <span class="badge bg-danger">Pending</span> @elseif($v->status == 'proses') <span class="badge-bg-warning">Proses</span> @else <span class="badge bg-success">Selesai</span> @endif</label>
                                                                         </div>
                                                                         <div class="mb-3">
@@ -178,9 +173,27 @@
                                                                             <label for="">FOTO Aduan</label>
                                                                             <img src="{{asset('Dokumentasi/Pengaduan/'.$v->foto)}}" alt="" class="img-fluid">
                                                                         </div>
+                                                                        @php
+                                                                            $item  = App\Models\Tanggapan::where('id_pengaduan', $v->id_pengaduan)->first();
+                                                                        @endphp
+                                                                        {{-- @foreach (\App\Models\Tanggapan::where('id_pengaduan', $v->id_pengaduan)->first() as $item) --}}
+                                                                        @if (!empty($item))
+                                                                            <div class="mb-3">
+                                                                            <label for="" class="form-label">Tanggapan Petugas </label>
+                                                                            <textarea class="form-control" name="" id="" rows="3" disabled>
+                                                                                {{$item->tanggapan}}
+                                                                            </textarea>
+                                                                            </div>
+                                                                            <div class="mb-3">
+                                                                                <label for="" class="form-label text-start">Petugas Pemberi Tanggapan</label>
+                                                                                <input type="text"
+                                                                                class="form-control" name="" id="" aria-describedby="helpId" placeholder="" value="{{$item->getPetugas->nama_petugas}}" disabled>
+                                                                            </div>
+                                                                        @endif
+                                                                        {{-- @endforeach --}}
                                                                         <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
                                                                             <i class="fas fa-xmark me-1"></i>
-                                                                            Close Project
+                                                                            Close Detail
                                                                         </button>
                                                                     </div>
                                                                 </div>
@@ -193,7 +206,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                
+                                {!! $pengaduan->links() !!}
                             </div>
                         </div>
                     </div>

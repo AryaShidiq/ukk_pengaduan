@@ -41,7 +41,7 @@
                 @csrf
                 <input type="hidden" name="aksi" id="aksi" value="">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table my-4">
                       <thead>
                         <tr>
                             <th class="text-center">
@@ -56,6 +56,8 @@
                             <th>Email</th>
                             <th>Telp</th>
                             <th>Role</th>
+                            <th>Add By</th>
+                            <th>Edit By</th>
                             <th>Action</th>
                         </tr>
                       </thead>
@@ -74,6 +76,12 @@
                             <td>{{$j->email}}</td>
                             <td>{{$j->telp}}</td>
                             <td class="text-capitalize">{{$j->level}}</td>
+                            <td class="text-capitalize">{{$j->PetugasAddBy->nama_petugas}}</td>
+                            @if (!empty($j->edit_by))
+                            <td class="text-capitalize">{{$j->PetugasEditBy->nama_petugas}}</td>
+                            @else
+                            <td>--</td>                                
+                            @endif
                             <td>
                                 <a href="{{url('/control/petugas/edit/'.$j->id_petugas)}}" class="btn btn-light btn-sm"><i class="mdi mdi-grease-pencil"></i></a>
                                 <a href="{{url('/control/petugas/detail/'.$j->id_petugas)}}" class="btn btn-light-sm"><i class="mdi mdi-eye"></i></a>
@@ -82,6 +90,7 @@
                         @endforeach
                       </tbody>
                     </table>
+                    {!! $petugas->links() !!}
                   </div>
               </form>
             </div>
@@ -99,7 +108,7 @@
       $('#aksi_reset').click(function(){
         var jml = $('input[name="id[]"]:checked').length;
         if(jml < 1){
-            alert('Silahkan Pilih data yang akan di publish');
+            alert('Silahkan Pilih data yang akan di reset');
         }else{
             r = confirm('Anda akan reset akun?');
             if(r == true){

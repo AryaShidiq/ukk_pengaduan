@@ -42,7 +42,7 @@
                 @csrf
                 <input type="hidden" name="aksi" id="aksi" value="">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table my-4">
                       <thead>
                         <tr>
                             <th class="text-center">
@@ -80,6 +80,7 @@
                         @endforeach
                       </tbody>
                     </table>
+                    {!! $tanggapan->links() !!}
                   </div>
               </form>
             </div>

@@ -14,22 +14,25 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-ld-12">
+            <div class="row ">
+                <div class="col-lg-6">
                     <div class="form-group">
-                        <form action="GET" action="{{URL::current()}}">
-                            <div class="btn-group">
-                                <a href="javascript:void()" class="btn btn-sm text-light btn-primary" id="aksi"><i class="mdi mdi-plus"></i></a>
-                                <a href="javascript:void()" class="btn btn-sm text-light btn-success" id="aksi"><i class="mdi mdi-check"></i></a>
-                                <a href="javascript:void()" class="btn btn-sm text-light btn-warning" id="aksi"><i class="mdi mdi-alert-circle"></i></a>
-                                <a href="javascript:void()" class="btn btn-sm text-light btn-danger" id="aksi"><i class="mdi mdi-delete"></i></a>
-                            </div>
-                        </form>
+                        <div class="btn-group">
+                            <a href="javascript:void()" class="btn btn-sm text-light btn-danger" id="aksi_delete"><i class="mdi mdi-delete"></i></a>
+                        </div>
                     </div>
+                </div>
+                <div class="col-lg-6">
+                    <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search" method="GET" action="{{URL::current()}}">
+                        <input type="text" class="form-control" placeholder="Cari nama, nik atau email pelapor, Judul Pengaduan" name="q" value="{{old('q')}}">
+                        <button class="btn btn-primary"><span class="mdi mdi-send"></span></button>
+                    </form>
+                </div>
+                <div class="col-lg-12">
                     <form action="{{url('pengaduan/action')}}" id="a" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="aksi" id="aksi" value="">
                         <div class="tabe-responsive">
-                            <table class="table">
+                            <table class="table my-4">
                                 <thead>
                                     <tr>
                                         <th class="text-center">
@@ -53,7 +56,7 @@
                                             <th class="text-center">
                                                 <div class="form-check form-check-muted m-0">
                                                     <label class="form-check-label">
-                                                      <input type="checkbox" class="form-check-input" name="" id="{{$v['id_pengaduan']}}" value="{{$v['id_pengaduan']}}">
+                                                      <input type="checkbox" class="form-check-input" name="" id="{{$v['id']}}" value="{{$v['id']}}">
                                                     </label>
                                                 </div>
                                             </th>
@@ -63,17 +66,37 @@
                                             <th>{{$v->email}}</th>
                                             <th>{{$v->telp}}</th>
                                             <th>
-                                                <a href="{{url('pengaduan/edit/'.$v->id_pengaduan)}}" class="btn btn-light btn-sm"><i class="mdi mdi-grease-pencil"></i></a>
-                                                <a href="{{url('pengaduan/detail/'.$v->id_pengaduan)}}" class="btn btn-light btn-sm"><i class="mdi mdi-eye"></i></a>
+                                                {{-- <a href="{{url('pengaduan/edit/'.$v->id)}}" class="btn btn-light btn-sm"><i class="mdi mdi-grease-pencil"></i></a> --}}
+                                                <a href="javascript:void(0)" class="btn btn-light btn-sm"><i class="mdi mdi-eye"></i></a>
                                             </th>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                            {!! $masyarakat->links() !!}
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        $(function(){
+            $('#selectAll').click(function (){ 
+                $('input[type=checkbox]').prop('checked', $(this).prop('checked'));
+            });
+            $('#aksi_delete').click(function(){
+            var jml = $('input[name="id[]"]:checked').length;
+            if(jml < 1){
+                alert('Silahkan Pilih data yang akan di hapus');
+            }else{
+                r = confirm('Anda akan hapus data?');
+                if(r == true){
+                    $('#aksi').val('d');
+                    $('#a').submit();
+                }
+            }
+            });
+        })
+    </script>
 @endsection

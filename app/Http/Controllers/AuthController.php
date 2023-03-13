@@ -118,8 +118,8 @@ class AuthController extends Controller
             $validateData['password'] = Hash::make($validateData['password']);
             // dd($validateData);
             Masyarakat::create($validateData);
-            $request->session()->flash('success', 'Berhasil Registrasi Silakan Login');
-            return redirect('/')->with('success','Registrasi Berhasil !!!');
+            $request->session()->flash('RegisterDone', 'Berhasil Registrasi Silakan Login');
+            return redirect('/')->with('RegisterDone','Registrasi Berhasil !!!');
         } else {
             // return redirect()->back()->withInput()->with('regist fail', 'gagal lurr');
             return redirect()->back()->with('registFail', 'gagal lurr');

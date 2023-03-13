@@ -17,7 +17,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $kategori = Category::all();
+        $kategori = Category::paginate(10);
         return view('Category.index', compact('kategori'));
     }
 
@@ -92,11 +92,11 @@ class CategoryController extends Controller
 
             }
             DB::commit();
-            return redirect('/category');
+            return redirect('/category')->with('successSubmit','Data berhasil disimpan !!!');
             
         } catch (Execption $e) {
             DB::rollBack();
-            return redirect('/category');
+            return redirect('/category')->with('errorSubmit','Terjadi Kesalahan !!!');
         }
     }
 
@@ -158,15 +158,15 @@ class CategoryController extends Controller
         switch ($request->aksi) {
             case 'p':
                 Category::whereIn('id', $request->input('id'))->update(['status' => 'p']);
-                return redirect()->back()->with('success', 'Data Sudah Di Publish');
+                return redirect()->back()->with('success', 'Data Sudah Di Publish !!! ');
                 break;
             case 'h':
                 Category::whereIn('id', $request->input('id'))->update(['status' => 'h']);
-                return redirect()->back()->with('success', 'Data Sudah Di Hide');
+                return redirect()->back()->with('success', 'Data Sudah Di Hide !!! ');
                 break;
             case 'd':
                 Category::whereIn('id', $request->input('id'))->delete();
-                return redirect()->back()->with('success', 'Data Sudah Di Hapus');
+                return redirect()->back()->with('success', 'Data Sudah Di Hapus !!! ');
                 break;
             default:
                 return redirect()->back()->with('error', 'Error Connection !!!');

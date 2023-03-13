@@ -33,7 +33,7 @@ class PetugasController extends Controller
 
     public function index()
     {
-        $petugas    = Petugas::all(); 
+        $petugas    = Petugas::paginate(10); 
         return view('Petugas.index', compact('petugas'));
     }
 

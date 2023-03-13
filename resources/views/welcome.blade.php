@@ -43,7 +43,7 @@
                                   {{auth()->guard('masyarakat')->user()->nama}}
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                    <li><a class="dropdown-item" href="{{url('myaccount')}}">My Account</a></li>
+                                    <li><a class="dropdown-item" href="{{url('laporanku')}}">laporanku</a></li>
                                   <li><a class="dropdown-item" href="{{route('logout')}}">Logout</a></li>
                                 </ul>
                             </div>
@@ -488,6 +488,22 @@
                 Swal.fire({
                     icon: 'success',
                     title: 'Aduan Berhasil Dibuat...',
+                })
+            </script>
+        @endif
+        @if (Session::has('RegisterDone'))
+            <script>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Akun Berhasil Dibuat !!!',
+                })
+            </script>
+        @endif
+        @if (Session::has('registFail'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registrasi Gagal !!!',
                 })
             </script>
         @endif

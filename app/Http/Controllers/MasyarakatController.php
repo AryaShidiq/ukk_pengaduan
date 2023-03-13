@@ -12,9 +12,14 @@ class MasyarakatController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $masyarakat = Masyarakat::all();
+        $q          = (empty($request->input('q'))) ? null : htmlentities($request->input('q'), ENT_QUOTES);
+        $masyarakat = Masyarakat::where('id','<>',null);
+        if (!empty($q)) {
+            $masyarakat = $masyarakat->where('nama','LIKE','%'.$q.'%')->Orwhere('email','LIKE','%'.$q.'%')->Orwhere('nik','LIKE','%'.$q.'%');
+        }
+        $masyarakat = $masyarakat->paginate(10);
         return view('Masyarakat.index', compact('masyarakat'));
     }
 
@@ -79,8 +84,17 @@ class MasyarakatController extends Controller
      * @param  \App\Models\Masyarakat  $masyarakat
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Masyarakat $masyarakat)
+    public function action(Request $request)
     {
-        //
+        switch ($request->aksi) {
+            case 'd':
+                Masyarakat::wherein('id',$request->input('id'));
+                return redirect()->back()->with('successDelete','Data Telah Dihapus !!!');
+                break;
+            
+            default:
+                return redirect()->back()->with('error','Error Connection !!!');
+                break;
+        }
     }
 }

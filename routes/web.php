@@ -22,15 +22,6 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-// Route::get('/test', function () {
-//     for($i=1; $i<10; $i++) {
-//         $total = $total + $i;
-//     }
-//     return $total;
-//     // $user = Auth::guard('masyarakat')->user();
-//     // return view('welcome');
-// });
 Route::group(['middleware'=>'auth:admin','prefix'=>'control'] ,function () {
     Route::get('/', [PetugasController::class, 'dashboard']);
     Route::get('/myaccount', [MyAccountController::class, 'index']);
@@ -45,18 +36,7 @@ Route::group(['middleware'=>'auth:admin','prefix'=>'control'] ,function () {
         });
     });
 });
-// Route::group(['middleware' => ['auth:admin','RoleAccess:admin']],function(){
-//     Route::get('/petugas', [PetugasController::class, 'index']);
-//     Route::get('/petugas/add', [PetugasController::class, 'add']);
-//     Route::get('/petugas/edit/{id}', [PetugasController::class, 'edit']);
-//     Route::post('/petugas/simpan', [PetugasController::class, 'simpan']);
-//     Route::match(['get', 'post'], 'petugas/action', [PetugasController::class ,'action']);
-//     Route::get('/admin', function () {
-//         return view('Administrator.index');
-//     });
-    
-// });
-Route::group(['middleware' => ['auth:admin'], 'prefix'=>'admin'],function(){
+Route::group(['middleware' => ['auth:admin','RoleAccess:admin'], 'prefix'=>'admin'],function(){
     Route::get('/petugas/edit/{id}', [MyAccountController::class, 'edit']);
     Route::post('/petugas/simpan', [MyAccountController::class, 'simpan']);
     Route::match(['get', 'post'], 'petugas/action', [MyAccountController::class ,'action']);
@@ -68,7 +48,7 @@ Route::group(['middleware' => ['auth:admin'], 'prefix'=>'admin'],function(){
 // Frontend
 Route::get('/', [FrontendController::class, 'home']);
 Route::post('/kirim-pengaduan', [FrontendController::class, 'sendForm'])->middleware('auth:masyarakat');
-Route::get('/myaccount', [FrontendController::class,'myaccount'])->middleware('auth:masyarakat');
+Route::get('/laporanku', [FrontendController::class,'laporanku'])->middleware('auth:masyarakat');
 
 // Auth
 Route::get('login', [AuthController::class, 'form'])->name('login');
@@ -79,18 +59,19 @@ Route::post('register/post', [AuthController::class, 'postRegis'])->name('post-r
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
 
-Route::group(['prefix'=>'pengaduan'],function () {
+Route::group(['prefix'=>'pengaduan','middleware' => ['auth:admin']],function () {
     // Route::get('/orders/{id}', 'show');
     // Route::get('/', [PengaduanController::class ,'index'])->middleware('auth:web');
     Route::get('/', [PengaduanController::class ,'index']);
     Route::get('create', [PengaduanController::class ,'create']);
+    Route::get('cetak-report', [PengaduanController::class ,'cetakReport'])->middleware('RoleAccess:admin');
     Route::get('/edit/{id}', [PengaduanController::class ,'edit']);
     Route::get('/detail/{id}', [PengaduanController::class, 'show']);
     Route::post('/simpan', [PengaduanController::class,'simpanPengaduan']);
     Route::match(['get', 'post'], '/action', [PengaduanController::class ,'action']);
     // Route::post('/orders', 'store');
 });
-Route::group(['prefix'=> 'category'],function () {
+Route::group(['prefix'=> 'category','middleware' => ['auth:admin']],function () {
     Route::get('/', [CategoryController::class,'index']);
     Route::get('/create', [CategoryController::class ,'create']);
     Route::get('/edit/{id}', [CategoryController::class ,'edit']);
@@ -99,7 +80,7 @@ Route::group(['prefix'=> 'category'],function () {
     // Route::get('/{id}', 'show');
     // Route::post('/orders', 'store');
 });
-Auth::routes();
+// Auth::routes();
 Route::group(['prefix' => 'tanggapan', 'middleware' => 'auth:admin'], function() {
     Route::get('/', [TanggapanController::class, 'index']);
     Route::get('/ajax/{date}', [TanggapanController::class, 'fetchAjax']);
@@ -111,9 +92,11 @@ Route::group(['prefix' => 'tanggapan', 'middleware' => 'auth:admin'], function()
 });
 Route::prefix('masyarakat')->group(function () {
     Route::get('/', [MasyarakatController::class, 'index']);
+    Route::match(['get', 'post'], '/action', [MasyarakatController::class, 'action']);
+
 });
 // Route::controller(MasyarakatController::class)->group(['prefix'=> 'masyarakat'],function () {
 //     Route::get('/', 'index');
 //     Route::post('/orders', 'store');
 // });
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

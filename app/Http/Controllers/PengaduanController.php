@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class PengaduanController extends Controller
 {
@@ -58,8 +59,8 @@ class PengaduanController extends Controller
             });
         }
 
-        // $pengaduan->paginate(20);
-        $pengaduan= $pengaduan->get();
+        $pengaduan   = $pengaduan->paginate(10)->withQueryString();
+        // $pengaduan= $pengaduan->get();
 
         return view('Pengaduan.index', compact('pengaduan','kategori'));
     }
@@ -223,9 +224,23 @@ class PengaduanController extends Controller
      * @param  \App\Models\Pengaduan  $pengaduan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pengaduan $pengaduan)
+    public function cetakReport(Request $request)
     {
-        //
+        // dd($request->all());
+        $driTgl             = $request->input('driTgl');
+        $hgTgl              = $request->input('hgTgl');
+        $pengaduan          = Pengaduan::whereBetween('tgl_pengaduan',[$driTgl,$hgTgl])->get();
+        $data               = array();
+        $data['pengaduan']  = $pengaduan;
+        $data['driTgl']     = Carbon::parse($driTgl)->format('j F Y');
+        $data['hgTgl']      = Carbon::parse($hgTgl)->format('j F Y');
+        if (count($pengaduan) > 0) {
+            view()->share('data',$data);
+            $cetak              = PDF::loadview('Pengaduan.pdf');
+            return $cetak->download('Laporan Dari Tanggal'.' '.$data['driTgl'].' '. 'Hingga Tanggal'.' '.$data['hgTgl'].'.'.'pdf');
+        }
+
+        return redirect()->back()->with('pdfail', 'gagal rek');
     }
 
     /**
@@ -239,15 +254,16 @@ class PengaduanController extends Controller
         // dd($request->all());
         switch ($request->aksi) {
             case 'selesai':
-                Pengaduan::whereIn('id_pengaduan', $request->input('id_action'))->update(['status'=>'selesai']);
-                return redirect()->back()->with('success', 'Data Sudah Di Publish');
+                Pengaduan::whereIn('id_pengaduan', $request->input('id'))->update(['status'=>'selesai']);
+                return redirect()->back()->with('success', 'Status Data Telah Selesai !!!');
                 break;
             case 'proses':
-                Pengaduan::whereIn('id_pengaduan', $request->input('id_action'))->update(['status'=>'proses']);
-                return redirect()->back()->with('warning', 'Data Sudah di Hidden !!!');
+                // dd($request->all());
+                Pengaduan::whereIn('id_pengaduan', $request->input('id'))->update(['status'=>'proses']);
+                return redirect()->back()->with('warning', 'Status Data Sudah di Proses !!!');
                 break;
             case 'd':
-                Pengaduan::whereIn('id_pengaduan', $request->input('id_action'))->delete();
+                Pengaduan::whereIn('id_pengaduan', $request->input('id'))->delete();
                 return redirect()->back()->with('danger', 'Data Sudah Di Hapus');
                 break;
             default:
