@@ -227,8 +227,10 @@ class PengaduanController extends Controller
     public function cetakReport(Request $request)
     {
         // dd($request->all());
-        $driTgl             = $request->input('driTgl');
-        $hgTgl              = $request->input('hgTgl');
+        // $driTgl             = $request->input('driTgl');
+        $driTgl             = date('Y-m-d 00:00:00', strtotime($request->get('driTgl')));
+        // $hgTgl              = $request->input('hgTgl');
+        $hgTgl              = date('Y-m-d 23:59:59', strtotime($request->get('hgTgl')));
         $pengaduan          = Pengaduan::whereBetween('tgl_pengaduan',[$driTgl,$hgTgl])->get();
         $data               = array();
         $data['pengaduan']  = $pengaduan;
@@ -254,6 +256,7 @@ class PengaduanController extends Controller
         // dd($request->all());
         switch ($request->aksi) {
             case 'selesai':
+                // $cek_selesai    = Pengaduan::whereIn('id_pengaduan', $request->input(''));
                 Pengaduan::whereIn('id_pengaduan', $request->input('id'))->update(['status'=>'selesai']);
                 return redirect()->back()->with('success', 'Status Data Telah Selesai !!!');
                 break;

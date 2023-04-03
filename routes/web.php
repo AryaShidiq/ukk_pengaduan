@@ -71,7 +71,7 @@ Route::group(['prefix'=>'pengaduan','middleware' => ['auth:admin']],function () 
     Route::match(['get', 'post'], '/action', [PengaduanController::class ,'action']);
     // Route::post('/orders', 'store');
 });
-Route::group(['prefix'=> 'category','middleware' => ['auth:admin']],function () {
+Route::group(['prefix'=> 'category','middleware' => ['auth:admin','RoleAccess:admin']],function () {
     Route::get('/', [CategoryController::class,'index']);
     Route::get('/create', [CategoryController::class ,'create']);
     Route::get('/edit/{id}', [CategoryController::class ,'edit']);

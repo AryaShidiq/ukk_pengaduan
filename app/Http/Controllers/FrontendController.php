@@ -47,7 +47,7 @@ class FrontendController extends Controller
             $isi_laporan        = $request->input('isi_laporan');
             $nik                = auth()->guard('masyarakat')->user()->nik;
             $category           = $request->input('category');
-            $foto               = $request->input('foto');
+            // $foto               = $request->input('foto');
 
             $simpan                 = new Pengaduan();
             $simpan->tgl_pengaduan  = $tgl_pengaduan;

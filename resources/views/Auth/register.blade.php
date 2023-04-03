@@ -90,6 +90,6 @@
           return /^\d*$/.test(value);    // Allow digits only, using a RegExp
       },"Only digits allowed");
     });
-});
+  });
 </script>
 @endsection

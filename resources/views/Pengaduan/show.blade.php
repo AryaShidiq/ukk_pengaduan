@@ -3,6 +3,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
+            <a href="{{url('pengaduan')}}" class="btn btn-secondary d-inline-block"><i class="mdi mdi-arrow-left"></i> Back</a>
             <div class="row">
                 <div class="col-md-6">
                     <h1>Data Diri Pemberi Aduan</h1>

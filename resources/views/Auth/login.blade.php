@@ -3,9 +3,15 @@
 @section('content')
     <h3 class="card-title text-left mb-3">Login</h3>
     @if (Session::has('success'))
-        <div class="alert alert-success alert-dismissible">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <div class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             <span>{!! Session::get('success') !!}</span>
+        </div>
+    @endif
+    @if (Session::has('error'))
+        <div class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <span>{!! Session::get('error') !!}</span>
         </div>
     @endif
     <form method="POST" action="{{route('post-log-admin')}}">

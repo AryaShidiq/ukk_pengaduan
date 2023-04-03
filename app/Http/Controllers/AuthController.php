@@ -60,7 +60,7 @@ class AuthController extends Controller
         //     return redirect('/');
         // }
 
-        return redirect()->back();
+        return redirect()->back()->withErrors($credentials)->withInput();
 
     }
 
@@ -73,7 +73,7 @@ class AuthController extends Controller
             request()->session()->invalidate();
             request()->session()->regenerateToken();
             
-            return redirect('/')->with('success','logout sebagai user');
+            return redirect('/')->with('success', 'Logout Berhasil');
         } elseif(Auth::guard('admin')->check()) {
             
             Auth::guard('admin')->logout();
@@ -81,7 +81,7 @@ class AuthController extends Controller
             request()->session()->invalidate();
             request()->session()->regenerateToken();
 
-            return redirect('/login')->with('success', 'logout sebagai admin');
+            return redirect('/login')->with('success', 'Logout Berhasil');
         }
         // Auth::logout();
 

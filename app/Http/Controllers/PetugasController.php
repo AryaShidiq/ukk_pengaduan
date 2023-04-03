@@ -21,15 +21,15 @@ class PetugasController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function dashboard()
-     {
+    public function dashboard()
+    {
         $data                       = array();
         $data['pengaduan']          = Pengaduan::count();
         $data['pengaduan_selesai']  = Pengaduan::where('status','selesai')->count();
         $data['petugas']            = Petugas::count();
         $data['user']               = Masyarakat::count();
         return view('dashboard', compact('data'));
-     }
+    }
 
     public function index()
     {
